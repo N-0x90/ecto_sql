@@ -8,7 +8,7 @@ defmodule Ecto.Migration.SchemaMigration do
 
   @primary_key false
   schema "schema_migrations" do
-    field :version, :integer
+    field :version, :id
     timestamps updated_at: false
   end
 
@@ -29,7 +29,7 @@ defmodule Ecto.Migration.SchemaMigration do
   end
 
   def versions(repo, prefix) do
-    from(p in get_source(repo), select: type(p.version, :integer))
+    from(p in get_source(repo), select: type(p.version, :id))
     |> Map.put(:prefix, prefix)
   end
 
@@ -40,7 +40,7 @@ defmodule Ecto.Migration.SchemaMigration do
   end
 
   def down(repo, version, prefix) do
-    from(p in get_source(repo), where: p.version == type(^version, :integer))
+    from(p in get_source(repo), where: p.version == type(^version, :id))
     |> Map.put(:prefix, prefix)
     |> repo.delete_all(@opts)
   end
